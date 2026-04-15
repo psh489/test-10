@@ -1,0 +1,26 @@
+services:
+  nginx-app:
+    container_name: nginx-container
+    image: 458894893383.dkr.ecr.ap-south-1.amazonaws.com/std6/nginx:latest
+    
+    ports:
+      - "80:80"
+    
+    volumes:
+      # 1. HTML 소스 코드 연결
+      - /home/ec2-user/nginx/html:/usr/share/nginx/html
+      # 2. Nginx 설정 파일 연결
+      - /home/ec2-user/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      # 3. 로그 파일 연결 (추가된 부분)
+      - /home/ec2-user/nginx/logs:/var/log/nginx
+    
+    restart: always
+    
+    networks:
+      public-subnet:
+        aliases:
+          - nginx-svc  # 들여쓰기 수정 및 별칭 등록
+
+networks:
+  public-subnet:
+    driver: bridge
